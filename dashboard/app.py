@@ -1,11 +1,12 @@
 import datetime as dt
 from contextlib import contextmanager
 
+import os
 import pandas as pd
 import requests
 import streamlit as st
 
-API = "http://127.0.0.1:8000"
+API = os.getenv("API_URL", "http://127.0.0.1:8000")
 MONTHS = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"]
 PAYMENT_METHODS = ["UPI", "Card", "Cash", "Net banking"]
@@ -128,8 +129,27 @@ tab_overview, tab_payments, tab_add, tab_import = st.tabs(
 
 # The form is handled first, so a new payment shows up in the other tabs straight away.
 with tab_add:
+    category_flash = st.session_state.pop("category_flash", None)
+    if category_flash:
+        st.success(category_flash)
+
+    with st.expander("Add a category", expanded=not categories):
+        with st.form("add_category", clear_on_submit=True):
+            new_name = st.text_input("Category name")
+            category_submitted = st.form_submit_button("Add category")
+        if category_submitted and new_name.strip():
+            with backend_errors():
+                response = call("POST", "/categories", json={"name": new_name.strip()})
+            if response.status_code == 201:
+                st.session_state["category_flash"] = f"Category '{new_name.strip()}' added."
+                st.rerun()
+            elif response.status_code == 409:
+                st.warning("That category already exists.")
+            else:
+                st.error(f"Could not add the category: {response.text}")
+
     if not categories:
-        st.info("Add a category first (POST /categories on the /docs page).")
+        st.info("Add your first category above, then you can add payments.")
     else:
         with st.form("add_payment", clear_on_submit=True):
             amount = st.number_input("Amount (₹)", min_value=0.01, step=10.0, format="%.2f")
