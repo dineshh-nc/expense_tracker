@@ -90,3 +90,16 @@ Dates can be `YYYY-MM-DD`, `DD-MM-YYYY` or `DD/MM/YYYY`. Rows with a bad date or
 - CSV import supports one simple layout so far; bank-specific statement formats still need parsers.
 - Categories are shared by all users.
 - Planned: Docker setup, deployment, budgets and recurring payments.
+## Live demo
+
+- Dashboard: https://YOUR-APP.streamlit.app
+- API docs: https://expense-tracker-1-4pp0.onrender.com/docs
+
+Hosted on free tiers (Streamlit Community Cloud, Render, Neon). The API sleeps when idle, so the first request after a quiet period can take about a minute. This is a test deployment, so please do not use a real password.
+
+## Live demo
+
+- Dashboard: https://expensetracker-ezphgmagzryml3upkmacrl.streamlit.app/
+- API docs: https://expense-tracker-1-4pp0.onrender.com/docs
+
+Hosted on free tiers (Streamlit Community Cloud, Render, Neon). The API sleeps when idle, so the first request after a quiet period can take about a minute. This is a test deployment, so please do not use a real password.
