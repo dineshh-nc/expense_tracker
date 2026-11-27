@@ -19,7 +19,7 @@ class SessionExpired(Exception):
     pass
 
 
-def call(method, path, timeout=10, **kwargs):
+def call(method, path, timeout=60, **kwargs):
     headers = {"Authorization": f"Bearer {st.session_state['token']}"}
     response = requests.request(method, f"{API}{path}", headers=headers, timeout=timeout, **kwargs)
     if response.status_code == 401:
@@ -73,7 +73,7 @@ def show_login():
                 response = requests.post(
                     f"{API}/auth/login",
                     data={"username": email, "password": password},
-                    timeout=10,
+                    timeout=60,
                 )
             except requests.exceptions.RequestException:
                 st.error("Can't reach the backend. Is uvicorn running?")
@@ -95,7 +95,7 @@ def show_login():
                 response = requests.post(
                     f"{API}/auth/register",
                     json={"email": email, "password": password},
-                    timeout=10,
+                    timeout=60,
                 )
             except requests.exceptions.RequestException:
                 st.error("Can't reach the backend. Is uvicorn running?")
